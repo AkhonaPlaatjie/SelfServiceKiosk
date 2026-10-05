@@ -211,4 +211,4 @@ dotnet ef database update --project src/SelfServiceKiosk.Api
 - **Roles are an enum** (`UserRole.User`, `UserRole.SuperUser`), stored as text on the `Users` table. The project brief calls the second role "Administrator"; `SuperUser` is the same role under this starter's name.
 - **Passwords are hashed with ASP.NET Core Identity's built-in hasher** (NFR-01). The starter uses its own `User` entity instead of Identity's user and role tables, because the role is an enum.
 - **The token carries only an Id and a role**, never personal information.
-- **Target framework** is set once, in `Directory.Build.props`. It is `net8.0`, the minimum the brief allows. Microsoft's support for .NET 8 ends in November 2026; moving up means changing that one line and the package versions in `Directory.Packages.props`.
+- **Target framework** is set once, in `Directory.Build.props`. It is `net8.0`, the minimum the brief allows. Microsoft's support for .NET 8 ends in November 2026; moving up means changing that one line and the package versions in `Directory.Packages.props`..
