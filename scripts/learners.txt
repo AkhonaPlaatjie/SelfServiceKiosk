@@ -1,0 +1,26 @@
+# One learner per line. A branch called learner/<name> is created for each.
+# Replace the placeholders with each learner's name or GitHub username,
+# for example:  thabo-mokoena
+# Names are lower-cased and anything that is not a letter or digit becomes a hyphen.
+# Lines starting with # are ignored.
+
+learner-01
+learner-02
+learner-03
+learner-04
+learner-05
+learner-06
+learner-07
+learner-08
+learner-09
+learner-10
+learner-11
+learner-12
+learner-13
+learner-14
+learner-15
+learner-16
+learner-17
+learner-18
+learner-19
+learner-20

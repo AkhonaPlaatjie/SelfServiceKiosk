@@ -1,0 +1,7 @@
+# Code owners are asked to review every pull request that touches the paths below.
+#
+# 1. Replace the placeholder with the GitHub usernames (or a team) of the facilitators.
+# 2. Remove the leading "# " from the line.
+# 3. Then switch on "Require review from Code Owners" in the main branch rule.
+#
+# * @facilitator-username @mentor-username

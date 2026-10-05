@@ -1,0 +1,48 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6770B953-A5F0-4374-A5AE-3884359F3C65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfServiceKiosk.Api", "src\SelfServiceKiosk.Api\SelfServiceKiosk.Api.csproj", "{404CAEEE-A723-42D5-907A-9CABBE5EC139}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9A8DFEA4-EE65-4AC2-A54B-0E629332A7F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfServiceKiosk.Api.Tests", "tests\SelfServiceKiosk.Api.Tests\SelfServiceKiosk.Api.Tests.csproj", "{F8B2D959-90D6-4A87-8904-C25FE46CAC8F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{958C77E2-353F-4510-9430-DF520C8853A2}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		CONTRIBUTING.md = CONTRIBUTING.md
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+		global.json = global.json
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{404CAEEE-A723-42D5-907A-9CABBE5EC139}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{404CAEEE-A723-42D5-907A-9CABBE5EC139}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{404CAEEE-A723-42D5-907A-9CABBE5EC139}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{404CAEEE-A723-42D5-907A-9CABBE5EC139}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8B2D959-90D6-4A87-8904-C25FE46CAC8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8B2D959-90D6-4A87-8904-C25FE46CAC8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8B2D959-90D6-4A87-8904-C25FE46CAC8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8B2D959-90D6-4A87-8904-C25FE46CAC8F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{404CAEEE-A723-42D5-907A-9CABBE5EC139} = {6770B953-A5F0-4374-A5AE-3884359F3C65}
+		{F8B2D959-90D6-4A87-8904-C25FE46CAC8F} = {9A8DFEA4-EE65-4AC2-A54B-0E629332A7F2}
+	EndGlobalSection
+EndGlobal

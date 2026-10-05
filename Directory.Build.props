@@ -1,0 +1,19 @@
+<Project>
+
+  <!-- Settings shared by every project in the solution. -->
+  <PropertyGroup>
+    <!-- Brief: ".NET 8 or later". Change this one line to move every project to a newer version. -->
+    <TargetFramework>net8.0</TargetFramework>
+    <!-- Lets the app run on a newer .NET runtime when the .NET 8 runtime is not installed. -->
+    <RollForward>Major</RollForward>
+
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Possible null-reference bugs fail the build instead of becoming runtime crashes. -->
+    <WarningsAsErrors>$(WarningsAsErrors);nullable</WarningsAsErrors>
+
+    <Company>Singular Systems</Company>
+    <Product>Self-Service Kiosk</Product>
+  </PropertyGroup>
+
+</Project>

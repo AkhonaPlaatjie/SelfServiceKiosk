@@ -1,0 +1,40 @@
+name: CI
+
+# Runs on every pull request into main or a learner branch, and on every merge to main.
+# The job id "build-and-test" is the status check that the branch rules require,
+# so do not rename it without updating the rules as well.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches:
+      - main
+      - 'learner/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Install the .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore packages
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Run unit tests
+        run: dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage"

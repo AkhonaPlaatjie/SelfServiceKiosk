@@ -1,0 +1,21 @@
+using SelfServiceKiosk.Api.DTOs.Auth;
+using SelfServiceKiosk.Api.Enums;
+
+namespace SelfServiceKiosk.Api.Interfaces;
+
+/// <summary>Business rules for authentication.</summary>
+public interface IAuthService
+{
+    /// <summary>
+    /// Checks the credentials and returns an access token.
+    /// Throws InvalidCredentialsException for an unknown email, a wrong password or the wrong role,
+    /// and AccountDeactivatedException for a deactivated account (BR-09).
+    /// </summary>
+    /// <param name="request">Email and password.</param>
+    /// <param name="requiredRole">The role the account must hold for this login endpoint.</param>
+    /// <param name="cancellationToken">Cancels the database call if the client disconnects.</param>
+    Task<LoginResponseDto> LoginAsync(
+        LoginRequestDto request,
+        UserRole requiredRole,
+        CancellationToken cancellationToken = default);
+}
