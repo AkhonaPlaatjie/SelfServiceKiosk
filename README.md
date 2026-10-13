@@ -212,3 +212,14 @@ dotnet ef database update --project src/SelfServiceKiosk.Api
 - **Passwords are hashed with ASP.NET Core Identity's built-in hasher** (NFR-01). The starter uses its own `User` entity instead of Identity's user and role tables, because the role is an enum.
 - **The token carries only an Id and a role**, never personal information.
 - **Target framework** is set once, in `Directory.Build.props`. It is `net8.0`, the minimum the brief allows. Microsoft's support for .NET 8 ends in November 2026; moving up means changing that one line and the package versions in `Directory.Packages.props`..
+
+## Password hashing
+
+**Choice:** ASP.NET Core Identity's `PasswordHasher<User>` (PBKDF2), applied to our own `Users` table. We do not use Identity's user and role tables.
+
+**Why**
+- It ships with the framework, so there is no extra package to keep patched.
+- It is already registered in `ServiceCollectionExtensions` and used by `AuthService` and `DbSeeder`, and it is covered by the unit tests, so there was no working code to replace.
+- It salts every password, and it can report when a stored hash should be upgraded (`SuccessRehashNeeded`). `AuthService` does not act on that yet.
+
+**Alternative considered:** BCrypt.Net-Next. It is also a sound choice, but it would add a dependency and mean rewriting the login service, the seeder and the tests, with no benefit at this project's scale.
