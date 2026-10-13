@@ -23,4 +23,7 @@ public class KioskDbContext : DbContext
         // Picks up every IEntityTypeConfiguration<T> in this project automatically.
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(KioskDbContext).Assembly);
     }
+    public DbSet<Category> Categories => Set<Category>();
+    public DbSet<Product> Products => Set<Product>();
+
 }
