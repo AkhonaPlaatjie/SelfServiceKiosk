@@ -16,8 +16,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .IsRequired()
             .HasMaxLength(100);
 
-                    builder.Property(product => product.ImageUrl)
-            .HasMaxLength(500);
+        builder.Property(product => product.ImageUrl)
+        .IsRequired()
+        .HasMaxLength(500);
 
         // NUMERIC(10,2) in the ERD: up to 10 digits in total, 2 after the decimal point.
         builder.Property(product => product.Price)
