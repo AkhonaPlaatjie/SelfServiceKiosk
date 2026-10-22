@@ -30,6 +30,16 @@ var app = builder.Build();
 // ---------------------------------------------------------------------------
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
+builder.Services.AddHsts(options => options.MaxAge = TimeSpan.FromDays(365));
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+if (!app.Environment.IsDevelopment())
+{
+    // HSTS tells browsers to use HTTPS only. Skipped in Development because browsers remember it per host.
+    app.UseHsts();
+}
+
 app.UseHttpsRedirection();
 
 if (app.Environment.IsDevelopment())
