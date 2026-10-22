@@ -15,6 +15,8 @@ builder.Services
     .AddKioskCors(builder.Configuration)
     .AddKioskSwagger();
 
+builder.Services.AddHsts(options => options.MaxAge = TimeSpan.FromDays(365));
+
 builder.Services
     .AddControllers()
     .AddJsonOptions(options =>
@@ -30,7 +32,7 @@ var app = builder.Build();
 // ---------------------------------------------------------------------------
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-builder.Services.AddHsts(options => options.MaxAge = TimeSpan.FromDays(365));
+
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
