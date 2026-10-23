@@ -88,6 +88,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 *.tsbuildinfo
+coverage/
 
 ## ---------------------------------------------------------------
 ## Operating system files

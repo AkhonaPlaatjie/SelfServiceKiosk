@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using SelfServiceKiosk.Api.Data;
 using SelfServiceKiosk.Api.Interfaces;
 using SelfServiceKiosk.Api.Models;
-using SelfServiceKiosk.Api.Interfaces;
 
 namespace SelfServiceKiosk.Api.Repositories;
 
