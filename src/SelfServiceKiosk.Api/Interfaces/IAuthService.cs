@@ -18,4 +18,9 @@ public interface IAuthService
         LoginRequestDto request,
         UserRole requiredRole,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+/// Creates a new account with the User role. Throws EmailAlreadyExistsException for a duplicate email.
+/// </summary>
+Task<UserSummaryDto> RegisterAsync(RegisterRequestDto request, CancellationToken cancellationToken = default);   
 }

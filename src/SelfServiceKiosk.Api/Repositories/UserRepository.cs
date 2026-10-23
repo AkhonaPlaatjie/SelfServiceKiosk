@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SelfServiceKiosk.Api.Data;
 using SelfServiceKiosk.Api.Interfaces;
 using SelfServiceKiosk.Api.Models;
+using Microsoft.Data.SqlClient;
 
 namespace SelfServiceKiosk.Api.Repositories;
 
@@ -28,4 +29,26 @@ public class UserRepository : IUserRepository
             .AsNoTracking()
             .SingleOrDefaultAsync(user => user.Email == normalisedEmail, cancellationToken);
     }
+    public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken = default)
+{
+    var normalisedEmail = email.Trim().ToLowerInvariant();
+
+    return await _context.Users.AnyAsync(user => user.Email == normalisedEmail, cancellationToken);
+}
+
+public async Task AddAsync(User user, CancellationToken cancellationToken = default)
+{
+    _context.Users.Add(user);
+
+    try
+    {
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+    catch (DbUpdateException exception) when (exception.InnerException is SqlException { Number: 2601 or 2627 })
+    {
+        // Two people registered the same email at the same moment and the unique index stopped the second.
+        // The original exception message contains the email, so it is not passed on or logged.
+        throw new EmailAlreadyExistsException();
+    }
+}
 }

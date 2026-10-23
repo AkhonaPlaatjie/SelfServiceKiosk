@@ -75,4 +75,34 @@ public class AuthService : IAuthService
 
         return user.ToLoginResponseDto(token);
     }
+
+    public async Task<UserSummaryDto> RegisterAsync(
+    RegisterRequestDto request,
+    CancellationToken cancellationToken = default)
+{
+    if (await _userRepository.EmailExistsAsync(request.Email, cancellationToken))
+    {
+        // Never log the email address (NFR-09).
+        _logger.LogWarning("Registration refused: the email is already registered.");
+        throw new EmailAlreadyExistsException();
+    }
+
+    var user = new User
+    {
+        FirstName = request.FirstName.Trim(),
+        Surname = request.Surname.Trim(),
+        Email = request.Email.Trim().ToLowerInvariant(),
+        MobileNumber = request.MobileNumber.Trim(),
+        Role = UserRole.User, // always: no request field can choose the role
+        IsActive = true,
+        CreatedAtUtc = DateTime.UtcNow,
+    };
+    user.PasswordHash = _passwordHasher.HashPassword(user, request.Password);
+
+    await _userRepository.AddAsync(user, cancellationToken);
+
+    _logger.LogInformation("User {UserId} registered.", user.Id);
+
+    return user.ToSummaryDto();
+}
 }

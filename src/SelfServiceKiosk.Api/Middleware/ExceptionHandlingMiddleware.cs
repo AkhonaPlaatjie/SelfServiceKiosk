@@ -62,5 +62,14 @@ public class ExceptionHandlingMiddleware
 
         context.Response.StatusCode = statusCode;
         await context.Response.WriteAsJsonAsync(problem, options: null, contentType: "application/problem+json");
-    }
+
+   }
+        var (statusCode, title) = exception switch
+{
+    InvalidCredentialsException => (StatusCodes.Status401Unauthorized, exception.Message),
+    AccountDeactivatedException => (StatusCodes.Status403Forbidden, exception.Message),
+    EmailAlreadyExistsException => (StatusCodes.Status409Conflict, exception.Message),
+    _ => (StatusCodes.Status500InternalServerError, "Something went wrong. Please try again."),
+};
+
 }
