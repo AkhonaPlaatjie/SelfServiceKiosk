@@ -25,16 +25,18 @@ builder.Services
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
 
 // ---------------------------------------------------------------------------
 // 2. Build the request pipeline. The order of these lines matters.
 // ---------------------------------------------------------------------------
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseStatusCodePages();
 
 
-
-app.UseMiddleware<ExceptionHandlingMiddleware>();
+//app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (!app.Environment.IsDevelopment())
 {
