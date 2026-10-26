@@ -1,6 +1,6 @@
     # Self-Service Kiosk
 
-Starter solution for the Singular Academy Software Developer Learnership project.
+Starter solution for the Singular Software Developer project.
 
 It gives every learner the same clean starting point: the solution structure, the build and Git configuration, and **one fully worked example** — login for a `User` and for a `SuperUser`. Everything else in the project brief is yours to build, following the same pattern.
 
