@@ -1,8 +1,9 @@
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SelfServiceKiosk.Api.Data;
+using SelfServiceKiosk.Api.Exceptions;
 using SelfServiceKiosk.Api.Interfaces;
 using SelfServiceKiosk.Api.Models;
-using Microsoft.Data.SqlClient;
 
 namespace SelfServiceKiosk.Api.Repositories;
 

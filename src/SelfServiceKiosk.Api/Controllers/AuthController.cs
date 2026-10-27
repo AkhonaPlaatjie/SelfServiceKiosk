@@ -58,4 +58,20 @@ public class AuthController : ControllerBase
         var response = await _authService.LoginAsync(request, UserRole.SuperUser, cancellationToken);
         return Ok(response);
     }
+    /// <summary>Registers a new customer account (role: User).</summary>
+/// <response code="201">The account was created.</response>
+/// <response code="400">The request body failed validation.</response>
+/// <response code="409">An account with this email already exists.</response>
+[HttpPost("register")]
+[AllowAnonymous]
+[ProducesResponseType(typeof(UserSummaryDto), StatusCodes.Status201Created)]
+[ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+public async Task<ActionResult<UserSummaryDto>> Register(
+    [FromBody] RegisterRequestDto request,
+    CancellationToken cancellationToken)
+{
+    var response = await _authService.RegisterAsync(request, cancellationToken);
+    return StatusCode(StatusCodes.Status201Created, response);
+}
 }

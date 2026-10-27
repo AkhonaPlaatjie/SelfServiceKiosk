@@ -6,6 +6,5 @@ public class EmailAlreadyExistsException : Exception
     public EmailAlreadyExistsException()
         : base("An account with this email address already exists.")
     {
-        EmailAlreadyExistsException => (StatusCodes.Status409Conflict, exception.Message);
     }
 }
