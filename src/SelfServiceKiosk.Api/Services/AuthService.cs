@@ -53,7 +53,7 @@ public class AuthService : IAuthService
 
         // A User cannot sign in through the SuperUser endpoint, and the other way round.
         // The response is the same as for a wrong password, so the endpoint reveals nothing.
-        if (user.Role != requiredRole)
+        if (requiredRole is not null && user.Role != requiredRole)
         {
             _logger.LogWarning(
                 "Login failed for user {UserId}: the account is not a {RequiredRole}.",
@@ -105,4 +105,17 @@ public class AuthService : IAuthService
 
     return user.ToSummaryDto();
 }
+    public async Task<LoginResponseDto> RefreshAsync(int userId, CancellationToken cancellationToken = default)
+{
+    var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+    if (user is null || !user.IsActive)
+    {
+        // Deactivation therefore takes effect at the next refresh, within the token lifetime.
+        throw new InvalidCredentialsException();
+    }
+
+    var token = _tokenService.CreateAccessToken(user);
+    return user.ToLoginResponseDto(token);
+}
+
 }

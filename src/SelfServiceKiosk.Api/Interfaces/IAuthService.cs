@@ -14,10 +14,13 @@ public interface IAuthService
     /// <param name="request">Email and password.</param>
     /// <param name="requiredRole">The role the account must hold for this login endpoint.</param>
     /// <param name="cancellationToken">Cancels the database call if the client disconnects.</param>
-    Task<LoginResponseDto> LoginAsync(
-        LoginRequestDto request,
-        UserRole requiredRole,
-        CancellationToken cancellationToken = default);
+Task<LoginResponseDto> LoginAsync(
+    LoginRequestDto request,
+    UserRole? requiredRole = null,
+    CancellationToken cancellationToken = default);
+
+/// <summary>Issues a fresh token for an active account. Throws InvalidCredentialsException otherwise.</summary>
+Task<LoginResponseDto> RefreshAsync(int userId, CancellationToken cancellationToken = default);
 
     /// <summary>
 /// Creates a new account with the User role. Throws EmailAlreadyExistsException for a duplicate email.

@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using SelfServiceKiosk.Api.DTOs.Auth;
 using SelfServiceKiosk.Api.Enums;
 using SelfServiceKiosk.Api.Interfaces;
+using System.Globalization;
+using System.Security.Claims;
+using SelfServiceKiosk.Api.Constants;
 
 namespace SelfServiceKiosk.Api.Controllers;
 
@@ -73,5 +76,42 @@ public async Task<ActionResult<UserSummaryDto>> Register(
 {
     var response = await _authService.RegisterAsync(request, cancellationToken);
     return StatusCode(StatusCodes.Status201Created, response);
+}
+
+/// <summary>Logs in any active account. The role claim in the token says which kind it is.</summary>
+[HttpPost("login")]
+[AllowAnonymous]
+[ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
+[ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
+public async Task<ActionResult<LoginResponseDto>> Login(
+    [FromBody] LoginRequestDto request,
+    CancellationToken cancellationToken)
+{
+    var response = await _authService.LoginAsync(request, null, cancellationToken);
+    return Ok(response);
+}
+
+/// <summary>Issues a fresh token. The front end calls this while the user is active.</summary>
+[HttpPost("refresh")]
+[ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+public async Task<ActionResult<LoginResponseDto>> Refresh(CancellationToken cancellationToken)
+{
+    var userId = int.Parse(User.FindFirstValue(KioskClaimTypes.UserId)!, CultureInfo.InvariantCulture);
+    var response = await _authService.RefreshAsync(userId, cancellationToken);
+    return Ok(response);
+}
+
+/// <summary>
+/// Logs out. The API is stateless, so the client discards its token; the token also expires on its own.
+/// </summary>
+[HttpPost("logout")]
+[ProducesResponseType(StatusCodes.Status204NoContent)]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+public IActionResult Logout()
+{
+    return NoContent();
 }
 }
