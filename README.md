@@ -195,6 +195,10 @@ var userId = int.Parse(User.FindFirstValue(KioskClaimTypes.UserId)!, CultureInfo
 ```
 dotnet test
 dotnet test --collect:"XPlat Code Coverage"
+
+dotnet test --collect:"XPlat Code Coverage"
+dotnet tool install --global dotnet-reportgenerator-globaltool
+reportgenerator -reports:"tests/**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:Html
 ```
 
 The coverage file is written under `tests/SelfServiceKiosk.Api.Tests/TestResults/`.
