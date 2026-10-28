@@ -11,7 +11,7 @@ public class User
     public int Id { get; set; }
 
     public string FirstName { get; set; } = string.Empty;
-
+    
     public string Surname { get; set; } = string.Empty;
 
     /// <summary>Always stored trimmed and lower-case so lookups are case-insensitive.</summary>
