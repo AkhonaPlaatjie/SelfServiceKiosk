@@ -14,6 +14,7 @@ using SelfServiceKiosk.Api.Models;
 using SelfServiceKiosk.Api.Repositories;
 using SelfServiceKiosk.Api.Services;
 using SelfServiceKiosk.Api.Settings;
+using SelfServiceKiosk.Api.Enums;
 
 namespace SelfServiceKiosk.Api.Extensions;
 
@@ -71,7 +72,7 @@ public static class ServiceCollectionExtensions
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key)),
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.FromSeconds(30),
+                    ClockSkew = TimeSpan.Zero,
                     NameClaimType = KioskClaimTypes.UserId,
                     RoleClaimType = KioskClaimTypes.Role,
                 };
@@ -79,11 +80,13 @@ public static class ServiceCollectionExtensions
 
         services.AddAuthorization(options =>
         {
-            // NFR-02: every endpoint needs a valid token unless it is marked [AllowAnonymous].
-            // Forgetting an [Authorize] attribute therefore fails safe.
+            // NFR-02 (Non-Functional Requirement 02): every endpoint needs a valid token unless [AllowAnonymous].
             options.FallbackPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .Build();
+
+            // Administrators are the accounts with the SuperUser role.
+            options.AddPolicy(KioskPolicies.Administrator, policy => policy.RequireRole(nameof(UserRole.SuperUser)));
         });
 
         return services;

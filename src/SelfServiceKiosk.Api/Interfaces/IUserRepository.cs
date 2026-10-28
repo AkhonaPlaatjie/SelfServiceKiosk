@@ -13,5 +13,11 @@ Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken = 
 
 /// <summary>Saves a new account.</summary>
 Task AddAsync(User user, CancellationToken cancellationToken = default);
+
+/// <summary>Finds an account by id for changing it (tracked), or returns null.</summary>
+Task<User?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+
+/// <summary>Saves changes made to a tracked account.</summary>
+Task SaveChangesAsync(CancellationToken cancellationToken = default);
 }
 
