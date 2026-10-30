@@ -30,6 +30,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasForeignKey(product => product.CategoryId)
             .OnDelete(DeleteBehavior.Restrict); //It blocks deleting a category that still has products
 
+        builder.Property(product => product.RowVersion).IsRowVersion();
     }
 
 }

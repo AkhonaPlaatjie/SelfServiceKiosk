@@ -30,5 +30,6 @@ public class KioskDbContext : DbContext
     public DbSet<Transaction> Transactions => Set<Transaction>();
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+    public DbSet<StockPurchase> StockPurchases => Set<StockPurchase>();
 
 }

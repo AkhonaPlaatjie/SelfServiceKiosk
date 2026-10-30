@@ -12,6 +12,7 @@ public static class CategoryMapper
         {
             Id = category.Id,
             Name = category.Name,
+            IsActive = category.IsActive,
         };
     }
 }

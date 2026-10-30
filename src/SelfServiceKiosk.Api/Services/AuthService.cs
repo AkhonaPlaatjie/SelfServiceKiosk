@@ -9,8 +9,8 @@ using SelfServiceKiosk.Api.Models;
 namespace SelfServiceKiosk.Api.Services;
 
 /// <summary>
-/// The business rules for logging in. Everything it needs arrives through interfaces,
-/// so it can be unit tested without a database or a web server.
+/// The business rules for logging in, registering and refreshing a token.
+/// Everything it needs arrives through interfaces, so it can be unit tested without a database.
 /// </summary>
 public class AuthService : IAuthService
 {
@@ -33,7 +33,7 @@ public class AuthService : IAuthService
 
     public async Task<LoginResponseDto> LoginAsync(
         LoginRequestDto request,
-        UserRole requiredRole,
+        UserRole? requiredRole = null,
         CancellationToken cancellationToken = default)
     {
         var user = await _userRepository.GetByEmailAsync(request.Email, cancellationToken);
@@ -51,7 +51,7 @@ public class AuthService : IAuthService
             throw new InvalidCredentialsException();
         }
 
-        // A User cannot sign in through the SuperUser endpoint, and the other way round.
+        // When an endpoint asks for a specific role, a User cannot sign in as a SuperUser and the other way round.
         // The response is the same as for a wrong password, so the endpoint reveals nothing.
         if (requiredRole is not null && user.Role != requiredRole)
         {
@@ -77,45 +77,48 @@ public class AuthService : IAuthService
     }
 
     public async Task<UserSummaryDto> RegisterAsync(
-    RegisterRequestDto request,
-    CancellationToken cancellationToken = default)
-{
-    if (await _userRepository.EmailExistsAsync(request.Email, cancellationToken))
+        RegisterRequestDto request,
+        CancellationToken cancellationToken = default)
     {
-        // Never log the email address (NFR-09).
-        _logger.LogWarning("Registration refused: the email is already registered.");
-        throw new EmailAlreadyExistsException();
+        if (await _userRepository.EmailExistsAsync(request.Email, cancellationToken))
+        {
+            // Never log the email address (NFR-09).
+            _logger.LogWarning("Registration refused: the email is already registered.");
+            throw new EmailAlreadyExistsException();
+        }
+
+        var user = new User
+        {
+            FirstName = request.FirstName.Trim(),
+            Surname = request.Surname.Trim(),
+            Email = request.Email.Trim().ToLowerInvariant(),
+            MobileNumber = request.MobileNumber.Trim(),
+            Role = UserRole.User, // always: no request field can choose the role
+            IsActive = true,
+            CreatedAtUtc = DateTime.UtcNow,
+        };
+        user.PasswordHash = _passwordHasher.HashPassword(user, request.Password);
+
+        await _userRepository.AddAsync(user, cancellationToken);
+
+        _logger.LogInformation("User {UserId} registered.", user.Id);
+
+        return user.ToSummaryDto();
     }
 
-    var user = new User
+    public async Task<LoginResponseDto> RefreshAsync(
+        int userId,
+        CancellationToken cancellationToken = default)
     {
-        FirstName = request.FirstName.Trim(),
-        Surname = request.Surname.Trim(),
-        Email = request.Email.Trim().ToLowerInvariant(),
-        MobileNumber = request.MobileNumber.Trim(),
-        Role = UserRole.User, // always: no request field can choose the role
-        IsActive = true,
-        CreatedAtUtc = DateTime.UtcNow,
-    };
-    user.PasswordHash = _passwordHasher.HashPassword(user, request.Password);
+        var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+        if (user is null || !user.IsActive)
+        {
+            // Deactivation therefore takes effect at the next refresh, within the token lifetime.
+            throw new InvalidCredentialsException();
+        }
 
-    await _userRepository.AddAsync(user, cancellationToken);
+        var token = _tokenService.CreateAccessToken(user);
 
-    _logger.LogInformation("User {UserId} registered.", user.Id);
-
-    return user.ToSummaryDto();
-}
-    public async Task<LoginResponseDto> RefreshAsync(int userId, CancellationToken cancellationToken = default)
-{
-    var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
-    if (user is null || !user.IsActive)
-    {
-        // Deactivation therefore takes effect at the next refresh, within the token lifetime.
-        throw new InvalidCredentialsException();
+        return user.ToLoginResponseDto(token);
     }
-
-    var token = _tokenService.CreateAccessToken(user);
-    return user.ToLoginResponseDto(token);
-}
-
 }
