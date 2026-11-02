@@ -12,9 +12,15 @@ public class StockPurchaseConfiguration : IEntityTypeConfiguration<StockPurchase
 
         builder.HasKey(purchase => purchase.Id);
 
-        builder.Property(purchase => purchase.SupplierName).IsRequired().HasMaxLength(100);
-        builder.Property(purchase => purchase.UnitCost).HasPrecision(10, 2);
-        builder.Property(purchase => purchase.Reason).HasMaxLength(200);
+        builder.Property(purchase => purchase.SupplierName)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        builder.Property(purchase => purchase.UnitCost)
+            .HasPrecision(10, 2);
+
+        builder.Property(purchase => purchase.Reason)
+            .HasMaxLength(200);
 
         builder.HasOne(purchase => purchase.Product)
             .WithMany()

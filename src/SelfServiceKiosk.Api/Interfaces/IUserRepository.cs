@@ -9,15 +9,19 @@ public interface IUserRepository
     Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default);
 
     /// <summary>True when an account with this email exists (case-insensitive).</summary>
-Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken = default);
+    Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken = default);
 
-/// <summary>Saves a new account.</summary>
-Task AddAsync(User user, CancellationToken cancellationToken = default);
+    /// <summary>Finds an account by id for changing it (tracked), or returns null.</summary>
+    Task<User?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
 
-/// <summary>Finds an account by id for changing it (tracked), or returns null.</summary>
-Task<User?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+    /// <summary>One page of accounts, optionally filtered by a name or email prefix.</summary>
+    Task<(IReadOnlyList<User> Items, int TotalCount)> GetPageAsync(
+        int page,
+        int pageSize,
+        string? search,
+        CancellationToken cancellationToken = default);
 
-/// <summary>Saves changes made to a tracked account.</summary>
-Task SaveChangesAsync(CancellationToken cancellationToken = default);
+    Task AddAsync(User user, CancellationToken cancellationToken = default);
+
+    Task SaveChangesAsync(CancellationToken cancellationToken = default);
 }
-

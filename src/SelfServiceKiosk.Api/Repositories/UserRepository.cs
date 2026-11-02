@@ -38,6 +38,32 @@ public class UserRepository : IUserRepository
         return _context.Users.SingleOrDefaultAsync(user => user.Id == id, cancellationToken);
     }
 
+    public async Task<(IReadOnlyList<User> Items, int TotalCount)> GetPageAsync(
+        int page,
+        int pageSize,
+        string? search,
+        CancellationToken cancellationToken = default)
+    {
+        IQueryable<User> query = _context.Users.AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            // A prefix search ("starts with") can use the indexes; "contains" would scan the whole table.
+            var term = search.Trim();
+            var emailTerm = term.ToLowerInvariant();
+            query = query.Where(user =>
+                user.Surname.StartsWith(term)
+                || user.FirstName.StartsWith(term)
+                || user.Email.StartsWith(emailTerm));
+        }
+
+        return await query
+            .OrderBy(user => user.Surname)
+            .ThenBy(user => user.FirstName)
+            .ThenBy(user => user.Id)
+            .ToPageAsync(page, pageSize, cancellationToken);
+    }
+
     public async Task AddAsync(User user, CancellationToken cancellationToken = default)
     {
         _context.Users.Add(user);

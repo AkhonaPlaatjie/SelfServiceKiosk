@@ -29,6 +29,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasIndex(user => user.Email)
             .IsUnique();
 
+        // The admin user list searches by name, so those columns are indexed too.
+        builder.HasIndex(user => user.Surname);
+        builder.HasIndex(user => user.FirstName);
+
         builder.Property(user => user.MobileNumber)
             .IsRequired()
             .HasMaxLength(20);
@@ -36,8 +40,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(user => user.PasswordHash)
             .IsRequired();
 
-        // The enum is saved as its name ("User" / "SuperUser"), which is readable in the database
-        // and does not break if the enum's numbers are ever reordered.
+        // The enum is saved as its name ("User" / "SuperUser").
         builder.Property(user => user.Role)
             .HasConversion<string>()
             .HasMaxLength(20)

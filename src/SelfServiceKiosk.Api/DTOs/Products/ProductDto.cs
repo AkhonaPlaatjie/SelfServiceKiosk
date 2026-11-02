@@ -1,26 +1,23 @@
-using Microsoft.EntityFrameworkCore;
-using SelfServiceKiosk.Api.Models;
+namespace SelfServiceKiosk.Api.DTOs.Products;
 
-public async Task<(IReadOnlyList<Product> Items, int TotalCount)> GetPageAsync(
-    int page, int pageSize, int? categoryId, bool? isAvailable, bool customersOnly,
-    CancellationToken cancellationToken = default)
+/// <summary>A product as the client sees it.</summary>
+public class ProductDto
 {
-    IQueryable<Product> query = _context.Products.AsNoTracking();
+    public int Id { get; set; }
 
-    if (customersOnly)
-    {
-        query = query.Where(product => product.IsActive && product.IsAvailable);
-    }
+    public string Name { get; set; } = string.Empty;
 
-    if (categoryId is not null)
-    {
-        query = query.Where(product => product.CategoryId == categoryId);
-    }
+    public string? Description { get; set; }
 
-    if (isAvailable is not null)
-    {
-        query = query.Where(product => product.IsAvailable == isAvailable);
-    }
+    public decimal Price { get; set; }
 
-    return await query.OrderBy(product => product.Name).ToPageAsync(page, pageSize, cancellationToken);
+    public int StockQty { get; set; }
+
+    public string ImageUrl { get; set; } = string.Empty;
+
+    public int CategoryId { get; set; }
+
+    public bool IsActive { get; set; }
+
+    public bool IsAvailable { get; set; }
 }

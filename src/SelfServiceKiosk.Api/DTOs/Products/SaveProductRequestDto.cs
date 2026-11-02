@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SelfServiceKiosk.Api.DTOs.Products;
 
+/// <summary>Used to create and to update a product. Stock is not editable here: it changes only through stock purchases.</summary>
 public class SaveProductRequestDto
 {
     [Required(ErrorMessage = "Name is required.")]

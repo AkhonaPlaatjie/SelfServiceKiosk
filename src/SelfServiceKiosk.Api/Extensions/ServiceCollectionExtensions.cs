@@ -97,17 +97,22 @@ public static class ServiceCollectionExtensions
         services.AddOptions<SeedSettings>()
             .Bind(configuration.GetSection(SeedSettings.SectionName));
 
-        // NFR-01: ASP.NET Core Identity's built-in password hasher.
+        // NFR-01 (Non-Functional Requirement 01): ASP.NET Core Identity's built-in password hasher.
         services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
         // Repositories
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IStockRepository, StockRepository>();
 
         // Services
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<IStockService, StockService>();
+        services.AddScoped<IAdminUserService, AdminUserService>();
 
         services.AddScoped<DbSeeder>();
 
