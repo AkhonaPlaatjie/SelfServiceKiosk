@@ -113,6 +113,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IStockService, StockService>();
         services.AddScoped<IAdminUserService, AdminUserService>();
+        services.AddScoped<IProfileService, ProfileService>();
 
         services.AddScoped<DbSeeder>();
 
